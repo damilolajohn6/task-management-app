@@ -1,0 +1,38 @@
+.App {
+  text-align: center;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.app-content {
+  max-width: 80%;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.app-content h1 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.divider {
+  border-bottom: 1px solid #ccc;
+  margin: 20px;
+}
+
+.auth {
+  display: flex;
+  gap: 50px;
+}
