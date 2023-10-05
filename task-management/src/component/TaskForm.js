@@ -26,6 +26,8 @@ const TaskForm = () => {
 
     try {
       const formattedDueDate = dueDate ? new Date(dueDate) : null;
+
+      const userId = localStorage.getItem("user_id");
       await axios.post("http://localhost:5000/tasks", {
         title,
         description,
@@ -34,6 +36,7 @@ const TaskForm = () => {
           : null,
         priority,
         category,
+        user_id: userId,
       });
       // Clear the form fields after successful submission
       setTitle("");

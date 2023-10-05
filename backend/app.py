@@ -70,6 +70,7 @@ def protected():
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
+@jwt_required()
 def manage_tasks():
     if request.method == 'GET':
         tasks = Task.query.all()
@@ -78,8 +79,8 @@ def manage_tasks():
 
     if request.method == 'POST':
         data = request.get_json()
+        current_user_id = get_jwt_identity().get('id')
 
-        # Convert 'due_date' to a Python datetime object
         due_date = datetime.strptime(data['due_date'], '%Y-%m-%d') if data.get('due_date') else None
 
         new_task = Task(
@@ -87,8 +88,10 @@ def manage_tasks():
             description=data['description'],
             due_date=due_date,
             priority=data.get('priority'),
-            category=data.get('category')
+            category=data.get('category'),
+            user_id=current_user_id
         )
+
         db.session.add(new_task)
         db.session.commit()
         return jsonify({'message': 'Task created successfully!'})
