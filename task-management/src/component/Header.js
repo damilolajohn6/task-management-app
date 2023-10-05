@@ -8,6 +8,7 @@ const Header = () => {
   const handleLogout = () => {
     // Clear the access token from localStorage (log out)
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     // Navigate back to the main page (login page)
     navigate("/");
   };

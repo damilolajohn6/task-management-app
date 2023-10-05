@@ -35,6 +35,11 @@ def register():
     username = data.get('username')
     password = data.get('password')
 
+    # Check if the username is already taken
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify({'message': 'Username is already taken'}), 400
+
     # Hash the password before saving to the database
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -62,6 +67,18 @@ def login():
 
 
 
+def authenticate(username, password):
+    # Fetch the user from the database based on the username
+    user = User.query.filter_by(username=username).first()
+
+    if user and bcrypt.check_password_hash(user.password, password):
+        # Generate a JWT token for the user
+        access_token = create_access_token(identity={'username': user.username})
+        return access_token
+
+    return None
+
+
 @app.route('/protected', methods=['GET'])
 @jwt_required()
 def protected():
@@ -79,7 +96,7 @@ def manage_tasks():
 
     if request.method == 'POST':
         data = request.get_json()
-        current_user_id = get_jwt_identity().get('id')
+        current_user_id = get_jwt_identity().get('username')
 
         due_date = datetime.strptime(data['due_date'], '%Y-%m-%d') if data.get('due_date') else None
 

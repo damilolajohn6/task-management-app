@@ -20,13 +20,19 @@ const TaskList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/tasks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTasks(response.data);
       setFilteredTasks(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
 
   const handleDelete = async (taskId) => {
     await axios.delete(`http://localhost:5000/tasks/${taskId}`);

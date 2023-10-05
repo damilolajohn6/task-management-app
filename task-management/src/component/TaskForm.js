@@ -17,7 +17,7 @@ const TaskForm = () => {
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
 
     if (!isLoggedIn) {
       console.log("Please log in to create a task.");
@@ -26,9 +26,10 @@ const TaskForm = () => {
 
     try {
       const formattedDueDate = dueDate ? new Date(dueDate) : null;
-
+      const token = localStorage.getItem("token");
       const userId = localStorage.getItem("user_id");
-      await axios.post("http://localhost:5000/tasks", {
+
+      const taskData = {
         title,
         description,
         due_date: formattedDueDate
@@ -36,9 +37,22 @@ const TaskForm = () => {
           : null,
         priority,
         category,
-        user_id: userId,
-      });
-      // Clear the form fields after successful submission
+        user_id: userId, // Include user_id in the request payload
+      };
+
+      const response = await axios.post(
+        "http://localhost:5000/tasks",
+        taskData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Handle response as needed, maybe display a success message
+      console.log("Task created successfully:", response.data);
+
       setTitle("");
       setDescription("");
       setDueDate("");
